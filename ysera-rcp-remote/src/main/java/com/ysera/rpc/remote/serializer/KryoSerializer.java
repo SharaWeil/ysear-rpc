@@ -1,38 +1,37 @@
-package com.ysera.rpc.remote.procotol;
+package com.ysera.rpc.remote.serializer;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
 
-/**
- * @author admin
- * @ClassName KryoCodec.java
- * @createTime 2023年01月17日 16:52:00
- */
-public class KryoCodec implements Codec{
+import java.io.IOException;
 
-    private ThreadLocal<Kryo> kryoThreadLocal = ThreadLocal.withInitial(() -> {
+/*
+ * @Author Administrator
+ * @Date 2023/1/17
+ **/
+public class KryoSerializer implements Serializer{
+
+    private final ThreadLocal<Kryo> kryoThreadLocal = ThreadLocal.withInitial(() -> {
         Kryo kryo = new Kryo();
         kryo.setReferences(true);
         kryo.setRegistrationRequired(false);
         return null;
     });
-
-
     @Override
-    public <T> byte[] encoder(T t) {
+    public <T> byte[] serialize(T obj) throws IOException {
         Kryo kryo = kryoThreadLocal.get();
         ByteBufferOutput output = new ByteBufferOutput();
-        kryo.writeClassAndObject(output,t);
+        kryo.writeClassAndObject(output,obj);
         output.close();
         return output.toBytes();
     }
 
     @Override
-    public <T> T decoder(Class<T> clazz, byte[] bytes) {
+    public <T> T deserialize(byte[] data, Class<T> clz) throws IOException {
         Kryo kryo = kryoThreadLocal.get();
-        ByteBufferInput input = new ByteBufferInput(bytes);
+        ByteBufferInput input = new ByteBufferInput(data);
         input.close();
-        return kryo.readObject(input,clazz);
+        return kryo.readObject(input,clz);
     }
 }

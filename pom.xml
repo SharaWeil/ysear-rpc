@@ -11,6 +11,7 @@
     <modules>
         <module>ysera-rpc-common</module>
         <module>ysera-rcp-remote</module>
+        <module>ysera-rpc-server</module>
     </modules>
 
     <properties>
@@ -82,9 +83,10 @@
                 </exclusions>
             </dependency>
 
+
             <dependency>
                 <groupId>org.apache.curator</groupId>
-                <artifactId>curator-client</artifactId>
+                <artifactId>curator-framework</artifactId>
                 <version>${curator.version}</version>
                 <exclusions>
                     <exclusion>

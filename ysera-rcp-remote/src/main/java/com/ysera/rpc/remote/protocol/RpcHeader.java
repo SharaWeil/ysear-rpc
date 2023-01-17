@@ -1,15 +1,9 @@
-package com.ysera.rpc.remote.dto;
-
-import com.ysera.rpc.enums.CodecType;
-import com.ysera.rpc.enums.CompressType;
-import com.ysera.rpc.enums.MessageType;
-
-import java.io.Serializable;
+package com.ysera.rpc.remote.protocol;
 
 /**
  * @author admin
- * @ClassName RpcMessage.java
- * @createTime 2023年01月17日 17:14:00
+ * @ClassName RpcMessageHandler.java
+ * @createTime 2023年01月17日 18:11:00
  *  ---------------------------------------------------------------------------------------
  *  ｜                                       protocol                                      ｜
  *  ---------------------------------------------------------------------------------------
@@ -20,56 +14,52 @@ import java.io.Serializable;
  *  ｜       ｜           ｜             ｜             ｜       ｜          ｜              ｜
  *  ----------------------------------------------------------------------------------------
  */
-public class RpcMessage implements Serializable {
+public class RpcHeader {
 
-    private static final long serialVersionUID = -1L;
+    private int magic;
+
+    private byte version ;
     /**
      * rpc message type
      */
-    private MessageType messageType;
+    private byte rpcType;
     /**
      * serialization type
      */
-    private CodecType codec;
+    private byte serialization;
     /**
      * compress type
      */
-    private CompressType compressType;
+    private byte compress;
     /**
      * request id
      */
     private int requestId;
 
-
     private int bodyLength;
 
-    /**
-     * request data
-     */
-    private byte[] body;
-
-    public MessageType getMessageType() {
-        return messageType;
+    public byte getRpcType() {
+        return rpcType;
     }
 
-    public void setMessageType(MessageType messageType) {
-        this.messageType = messageType;
+    public void setRpcType(byte rpcType) {
+        this.rpcType = rpcType;
     }
 
-    public CodecType getCodec() {
-        return codec;
+    public byte getSerialization() {
+        return serialization;
     }
 
-    public void setCodec(CodecType codec) {
-        this.codec = codec;
+    public void setSerialization(byte serialization) {
+        this.serialization = serialization;
     }
 
-    public CompressType getCompress() {
-        return compressType;
+    public byte getCompress() {
+        return compress;
     }
 
-    public void setCompress(CompressType compress) {
-        this.compressType = compress;
+    public void setCompress(byte compress) {
+        this.compress = compress;
     }
 
     public int getRequestId() {
@@ -88,11 +78,19 @@ public class RpcMessage implements Serializable {
         this.bodyLength = bodyLength;
     }
 
-    public byte[] getBody() {
-        return body;
+    public int getMagic() {
+        return magic;
     }
 
-    public void setBody(byte[] body) {
-        this.body = body;
+    public void setMagic(int magic) {
+        this.magic = magic;
+    }
+
+    public byte getVersion() {
+        return version;
+    }
+
+    public void setVersion(byte version) {
+        this.version = version;
     }
 }
