@@ -16,4 +16,24 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ysera.rpc</groupId>
+            <artifactId>ysera-rpc-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
+            <version>${kryo.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
