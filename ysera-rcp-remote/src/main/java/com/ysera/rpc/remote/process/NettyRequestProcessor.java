@@ -27,7 +27,7 @@ public interface NettyRequestProcessor {
     /**
      *  process logic
      * @param channel channel
-     * @param command command
+     * @param request command
      */
-    void process(final Channel channel, final Request command);
+    void process(final Channel channel, final Request request);
 }

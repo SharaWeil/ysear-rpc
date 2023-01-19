@@ -9,9 +9,12 @@ import com.ysera.rpc.remote.protocol.RpcConstants;
 import com.ysera.rpc.remote.protocol.RpcHeader;
 import com.ysera.rpc.remote.protocol.RpcProtocol;
 import com.ysera.rpc.remote.protocol.RpcType;
+import com.ysera.rpc.remote.util.ChannelUtils;
 import com.ysera.rpc.util.Pair;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import jdk.nashorn.internal.objects.NativeUint8Array;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,38 +42,33 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
          log.info("client receive msg:{}", msg);
-//        try {
-//            log.info("client receive msg:{}", msg);
-//            if (msg instanceof RpcProtocol) {
-//                RpcProtocol rpcProtocol = (RpcProtocol) msg;
-//                RpcHeader rpcHeader = rpcProtocol.getMsgHeader();
-//                RpcType rpcType = RpcType.getRpcType(rpcHeader.getRpcType());
-//                Object body = rpcProtocol.getBody();
-//                if (rpcType == RpcType.HEARTBEAT) {
-//                    log.info("heart:[{}]", body);
-//                    return;
-//                }
-//                if (rpcType == RpcType.REQUEST) {
-//                    Request request = (Request) body;
-//                    threadPoolExecutor.execute(() -> {
-//                        try {
-//                            Response response = new Response();
-//                            Object[] arguments = request.getArguments();
-//                            Method method = request.getMethod();
-//                            String clazzName = request.getClazzName();
-//                            Class<?>[] paramType = request.getParamType();
-//                            int version = request.getVersion();
-////                            Class.forName(clazzName).getAnnotation(Rpc)
-////                            SpringBeanUtil.getBean()
-//                        } catch (ClassNotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                    });
-//                }
-//            }
-//        } catch (Exception exception) {
-//            exception.printStackTrace();
-//        }
+
+        if (msg instanceof RpcProtocol) {
+            RpcProtocol<?> rpcProtocol = (RpcProtocol<?>) msg;
+            RpcHeader rpcHeader = rpcProtocol.getMsgHeader();
+            RpcType rpcType = RpcType.getRpcType(rpcHeader.getRpcType());
+            Object body = rpcProtocol.getBody();
+            if (rpcType == RpcType.HEARTBEAT) {
+                log.info("heart:[{}]", body);
+                return;
+            }
+            final Pair<NettyRequestProcessor, ExecutorService> pair = processors.get(rpcType);
+            Channel channel = ctx.channel();
+            if (null != pair){
+                Runnable runnable = () -> {
+                    try {
+                        pair.getLeft().process(channel, (Request) body);
+                    } catch (Exception ex) {
+                        log.error("process msg {} error", msg, ex);
+                    }
+                };
+                try {
+                    pair.getRight().submit(runnable);
+                } catch (RejectedExecutionException e) {
+                    log.warn("thread pool is full, discard msg {} from {}", msg, ChannelUtils.getRemoteAddress(channel));
+                }
+            }
+        }
     }
 
     @Override

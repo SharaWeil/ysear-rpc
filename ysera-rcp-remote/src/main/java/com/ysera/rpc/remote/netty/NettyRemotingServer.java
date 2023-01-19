@@ -22,6 +22,8 @@ import com.ysera.rpc.remote.codec.NettyDecoder;
 import com.ysera.rpc.remote.codec.NettyEncoder;
 import com.ysera.rpc.remote.netty.config.NettyServerConfig;
 import com.ysera.rpc.remote.netty.handler.NettyServerHandler;
+import com.ysera.rpc.remote.process.NettyRequestProcessor;
+import com.ysera.rpc.remote.protocol.RpcType;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
@@ -182,5 +184,9 @@ public class NettyRemotingServer {
             }
             logger.info("netty server closed");
         }
+    }
+
+    public void registerProcessor(RpcType request, NettyRequestProcessor requestProcessor) {
+
     }
 }

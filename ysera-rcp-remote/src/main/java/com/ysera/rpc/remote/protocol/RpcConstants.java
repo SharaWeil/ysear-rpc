@@ -29,4 +29,5 @@ public class RpcConstants {
     public static final String PONG = "pong";
     public static final int MAX_FRAME_LENGTH = 8 * 1024 * 1024;
     public static final int CPUS = Runtime.getRuntime().availableProcessors();
+    public static final String COLON = ":";
 }
