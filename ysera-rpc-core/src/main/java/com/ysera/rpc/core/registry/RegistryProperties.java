@@ -22,6 +22,7 @@ package com.ysera.rpc.core.registry;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
@@ -29,7 +30,7 @@ import java.time.Duration;
  * @author admin
  */
 @Configuration
-@ConfigurationProperties(prefix = "registry")
+@ConfigurationProperties(prefix = "ysera.rpc.registry")
 public class RegistryProperties {
     private Type type;
     private ZookeeperProperties zookeeper = new ZookeeperProperties();
@@ -53,7 +54,7 @@ public class RegistryProperties {
     public enum Type {
         ZOOKEEPER
     }
-
+    @Component
     public static final class ZookeeperProperties {
         private String namespace;
         private String connectString;

@@ -2,7 +2,7 @@ package com.ysera.rpc.remote.codec;
 
 import com.ysera.rpc.remote.protocol.RpcHeader;
 import com.ysera.rpc.remote.protocol.RpcProtocol;
-import com.ysera.rpc.remote.serializer.RpcSerializer;
+import com.ysera.rpc.remote.serializer.RpcSerializerType;
 import com.ysera.rpc.remote.serializer.Serializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -30,10 +30,10 @@ public class NettyEncoder extends MessageToByteEncoder<RpcProtocol<Object>> {
         byteBuf.writeByte(msgHeader.getRpcType());
         byteBuf.writeByte(msgHeader.getCompress());
         byteBuf.writeByte(msgHeader.getSerialization());
-        byteBuf.writeInt(msgHeader.getRequestId());
+        byteBuf.writeLong(msgHeader.getRequestId());
         byte[] data = new byte[0];
         int msgLength = msgHeader.getBodyLength();
-        Serializer rpcSerializer = RpcSerializer.getSerializerByType(msgHeader.getSerialization());
+        Serializer rpcSerializer = RpcSerializerType.getSerializerByType(msgHeader.getSerialization());
         if (null != rpcSerializer) {
             data = rpcSerializer.serialize(msg.getBody());
             msgLength = data.length;

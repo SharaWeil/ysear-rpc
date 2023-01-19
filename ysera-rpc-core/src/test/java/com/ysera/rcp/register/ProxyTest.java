@@ -12,7 +12,7 @@ import org.junit.Test;
 public class ProxyTest {
     @Test
     public void testProxy() throws InstantiationException, IllegalAccessException {
-        HelloService helloService = RpcProxyFactory.newProxy(HelloService.class);
+        HelloService helloService = RpcProxyFactory.newProxy2(HelloService.class);
         System.out.println(helloService.sayHello("tom"));
     }
 }

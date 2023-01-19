@@ -21,6 +21,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.ysera.rpc.remote.codec.NettyDecoder;
 import com.ysera.rpc.remote.codec.NettyEncoder;
 import com.ysera.rpc.remote.netty.config.NettyServerConfig;
+import com.ysera.rpc.remote.netty.handler.NettyServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
@@ -41,9 +42,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * netty server
  * @author hanzhihua
  */
-public class NettyServer {
+public class NettyRemotingServer {
 
-    private final Logger logger = LoggerFactory.getLogger(NettyServer.class);
+    private final Logger logger = LoggerFactory.getLogger(NettyRemotingServer.class);
 
     /**
      * server bootstrap
@@ -76,7 +77,7 @@ public class NettyServer {
      */
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
 
-    private final ChannelHandler serverHandler = new NettyServerHandler();
+    private final NettyServerHandler serverHandler = new NettyServerHandler();
 
     /**
      * Netty server bind fail message
@@ -88,7 +89,7 @@ public class NettyServer {
      *
      * @param properties server config
      */
-    public NettyServer(final NettyServerProperties properties) {
+    public NettyRemotingServer(final NettyServerProperties properties) {
         int port = properties.getPort();
         if (port != 0){
             serverConfig.setListenPort(port);
@@ -149,6 +150,7 @@ public class NettyServer {
      * @param ch socket channel
      */
     private void initNettyChannel(SocketChannel ch) {
+        serverHandler.registerProcessor(null,null,null);
         ch.pipeline()
                 .addLast("encoder", new NettyEncoder())
                 .addLast("decoder", new NettyDecoder(Object.class))

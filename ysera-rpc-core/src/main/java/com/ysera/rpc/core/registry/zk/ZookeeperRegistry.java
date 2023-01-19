@@ -2,6 +2,7 @@ package com.ysera.rpc.core.registry.zk;
 
 import com.ysera.rpc.core.registry.Registry;
 import com.ysera.rpc.core.registry.RegistryProperties;
+import com.ysera.rpc.core.registry.RegistryProperties.ZookeeperProperties;
 import com.ysera.rpc.exception.RegistryException;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -32,14 +33,14 @@ import java.util.concurrent.TimeUnit;
  **/
 @Component
 @ConditionalOnProperty(prefix = "registry", name = "type", havingValue = "zookeeper")
-public class ZkRegistryImpl implements Registry {
-    private static final Logger log = LoggerFactory.getLogger(ZkRegistryImpl.class);
+public class ZookeeperRegistry implements Registry {
+    private static final Logger log = LoggerFactory.getLogger(ZookeeperRegistry.class);
 
+    private final ZookeeperProperties properties;
     private final CuratorFramework client;
-    private final RegistryProperties.ZookeeperProperties properties;
     private static final String DEFAULT_ZOOKEEPER_ADDRESS = "127.0.0.1:2181";
 
-    public ZkRegistryImpl(RegistryProperties registryProperties) {
+    public ZookeeperRegistry(RegistryProperties registryProperties) {
         properties = registryProperties.getZookeeper();
 
         final ExponentialBackoffRetry retryPolicy = new ExponentialBackoffRetry(
@@ -87,6 +88,7 @@ public class ZkRegistryImpl implements Registry {
     @Override
     public List<String> children(String key) {
         try {
+
             List<String> result = client.getChildren().forPath(key);
             result.sort(Comparator.reverseOrder());
             return result;

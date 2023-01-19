@@ -1,4 +1,4 @@
-package com.ysera.rpc.remote.serializer.compress;
+package com.ysera.rpc.remote.serializer;
 
 /*
  * @Author Administrator

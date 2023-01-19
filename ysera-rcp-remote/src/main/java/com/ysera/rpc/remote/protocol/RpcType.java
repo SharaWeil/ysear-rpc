@@ -1,5 +1,10 @@
 package com.ysera.rpc.remote.protocol;
 
+import com.ysera.rpc.remote.serializer.Compress;
+import com.ysera.rpc.remote.serializer.Serializer;
+
+import java.util.HashMap;
+
 /*
  * @Author Administrator
  * @Date 2023/1/17
@@ -24,5 +29,9 @@ public enum RpcType {
 
     public String getDescription() {
         return description;
+    }
+
+    public static RpcType getRpcType(byte type) {
+        return RpcType.values()[type-1];
     }
 }

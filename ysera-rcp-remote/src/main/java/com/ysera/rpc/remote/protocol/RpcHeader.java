@@ -10,7 +10,7 @@ package com.ysera.rpc.remote.protocol;
  *  ｜ magic ｜  version  ｜  messageTyp ｜  compress   ｜ codec ｜RequestId ｜messageLength ｜
  *  ----------------------------------------------------------------------------------------
  *  ｜       ｜           ｜             ｜             ｜       ｜          ｜              ｜
- *  ｜  4    ｜      1    ｜     1       ｜       1     ｜   1   ｜    4     ｜     4        ｜
+ *  ｜  4    ｜      1    ｜     1       ｜       1     ｜   1   ｜    8     ｜     4        ｜
  *  ｜       ｜           ｜             ｜             ｜       ｜          ｜              ｜
  *  ----------------------------------------------------------------------------------------
  */
@@ -34,7 +34,7 @@ public class RpcHeader {
     /**
      * request id
      */
-    private int requestId;
+    private long requestId;
 
     private int bodyLength;
 
@@ -62,11 +62,11 @@ public class RpcHeader {
         this.compress = compress;
     }
 
-    public int getRequestId() {
+    public long getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(int requestId) {
+    public void setRequestId(long requestId) {
         this.requestId = requestId;
     }
 

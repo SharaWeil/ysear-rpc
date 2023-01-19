@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RpcConsumer {
+public @interface RpcService {
 
     /**
      * 服务名称

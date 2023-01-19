@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ysera-rpc-server</artifactId>
+    <artifactId>ysera-rpc-core</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

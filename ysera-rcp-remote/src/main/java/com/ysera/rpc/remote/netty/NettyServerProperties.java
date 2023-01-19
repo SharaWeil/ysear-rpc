@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @createTime 2023年01月18日 17:03:00
  */
 @Configuration
-@ConfigurationProperties(prefix = "netty.server")
+@ConfigurationProperties(prefix = "ysera.rpc.netty")
 public class NettyServerProperties {
 
     private int port;

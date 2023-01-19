@@ -16,7 +16,7 @@ public class RpcConstants {
     public static final int MAGIC_NUMBER = 0x19f;
     //version information
     public static final byte VERSION = 1;
-    public static final int HEADER_LENGTH = 17;
+    public static final int HEADER_LENGTH = 22;
 
     public static final byte REQUEST_TYPE = 1;
     public static final byte RESPONSE_TYPE = 2;
@@ -28,4 +28,5 @@ public class RpcConstants {
     public static final String PING = "ping";
     public static final String PONG = "pong";
     public static final int MAX_FRAME_LENGTH = 8 * 1024 * 1024;
+    public static final int CPUS = Runtime.getRuntime().availableProcessors();
 }

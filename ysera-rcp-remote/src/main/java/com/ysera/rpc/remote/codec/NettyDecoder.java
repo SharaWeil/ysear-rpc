@@ -4,10 +4,10 @@ import com.ysera.rpc.remote.protocol.RpcConstants;
 import com.ysera.rpc.remote.protocol.RpcHeader;
 import com.ysera.rpc.remote.protocol.RpcProtocol;
 import com.ysera.rpc.remote.protocol.RpcType;
-import com.ysera.rpc.remote.serializer.RpcSerializer;
+import com.ysera.rpc.remote.serializer.RpcSerializerType;
 import com.ysera.rpc.remote.serializer.Serializer;
-import com.ysera.rpc.remote.serializer.compress.Compress;
-import com.ysera.rpc.remote.serializer.compress.RpcCompress;
+import com.ysera.rpc.remote.serializer.Compress;
+import com.ysera.rpc.remote.serializer.RpcCompressType;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -43,7 +43,7 @@ public class NettyDecoder extends ByteToMessageDecoder {
         byte eventType = byteBuf.readByte();
         byte compressType = byteBuf.readByte();
         byte serialization = byteBuf.readByte();
-        int requestId = byteBuf.readInt();
+        long requestId = byteBuf.readLong();
         int dataLength = byteBuf.readInt();
         byte[] data = new byte[dataLength];
 
@@ -59,12 +59,12 @@ public class NettyDecoder extends ByteToMessageDecoder {
         byteBuf.readBytes(data);
         rpcProtocol.setMsgHeader(header);
         // 数据是否被压缩过
-        Compress compress = RpcCompress.getCompressType(compressType);
+        Compress compress = RpcCompressType.getCompressType(compressType);
         if (compress != null){
             data = compress.decompress(data);
         }
         if (eventType != RpcType.HEARTBEAT.getType()) {
-            Serializer serializer = RpcSerializer.getSerializerByType(serialization);
+            Serializer serializer = RpcSerializerType.getSerializerByType(serialization);
             Object obj = serializer.deserialize(data, genericClass);
             rpcProtocol.setBody(obj);
         }

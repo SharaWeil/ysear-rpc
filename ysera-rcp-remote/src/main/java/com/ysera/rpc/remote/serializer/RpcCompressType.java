@@ -1,6 +1,4 @@
-package com.ysera.rpc.remote.serializer.compress;
-
-import com.ysera.rpc.remote.serializer.Serializer;
+package com.ysera.rpc.remote.serializer;
 
 import java.util.HashMap;
 
@@ -8,14 +6,14 @@ import java.util.HashMap;
  * @Author Administrator
  * @Date 2023/1/17
  **/
-public enum RpcCompress {
+public enum RpcCompressType {
     NONE((byte) 0, null);
 
     byte type;
 
     Compress compress;
 
-    RpcCompress(byte type, Compress compress) {
+    RpcCompressType(byte type, Compress compress) {
         this.type = type;
         this.compress = compress;
     }
@@ -27,7 +25,7 @@ public enum RpcCompress {
     private static final HashMap<Byte, Compress> COMPRESS_MAP = new HashMap<>();
 
     static {
-        for (RpcCompress compress : RpcCompress.values()) {
+        for (RpcCompressType compress : RpcCompressType.values()) {
             COMPRESS_MAP.put(compress.type, compress.compress);
         }
     }

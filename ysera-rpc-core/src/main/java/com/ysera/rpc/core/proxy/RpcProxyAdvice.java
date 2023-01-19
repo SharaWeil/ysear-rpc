@@ -1,12 +1,12 @@
 package com.ysera.rpc.core.proxy;
 
-import com.ysera.rpc.remote.netty.NettyClient;
+import com.ysera.rpc.core.annotation.RpcService;
+import com.ysera.rpc.exception.RemotingException;
+import com.ysera.rpc.remote.Request;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.aop.MethodBeforeAdvice;
-import org.springframework.cglib.proxy.MethodProxy;
+import org.apache.commons.lang3.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
@@ -16,14 +16,32 @@ import java.lang.reflect.Method;
  */
 public class RpcProxyAdvice implements MethodInterceptor {
 
-    private NettyClient client;
+    private Invoker invoker;
+
+    public RpcProxyAdvice() {
+
+    }
+
+    public RpcProxyAdvice(Invoker invoker) {
+        this.invoker = invoker;
+    }
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Object[] arguments = invocation.getArguments();
-        Class<?> declaringClass = invocation.getMethod().getDeclaringClass();
-        Annotation[] annotations = declaringClass.getAnnotations();
+        Method method = invocation.getMethod();
+        Class<?> declaringClass = method.getDeclaringClass();
+        RpcService annotation = declaringClass.getAnnotation(RpcService.class);
+        String clazz = annotation.clazz();
+        String serviceName = annotation.serviceName();
+        int version = annotation.version();
+        if (StringUtils.isBlank(serviceName)){
+            throw new RemotingException("service name is null");
+        }
+        Class<?>[] parameterTypes = method.getParameterTypes();
 
-        return "代理发送的信息";
+        Request request = new Request(clazz, method,arguments, parameterTypes,version);
+
+        return invoker.invoke(serviceName,request);
     }
 }
