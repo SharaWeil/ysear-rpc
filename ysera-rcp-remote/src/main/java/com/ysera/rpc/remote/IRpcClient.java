@@ -5,11 +5,11 @@ import com.ysera.rpc.remote.protocol.RpcProtocol;
 
 import java.net.InetSocketAddress;
 
-/*
+/**
  * @author Administrator
  * @ClassName IRpcClient
  * @createTIme 2023年01月19日 11:14:14
- **/
+ */
 public interface IRpcClient {
 
     /**

@@ -3,10 +3,11 @@
 但是自己在实现的过程中自己也遇到了很多问题。过这个简易的轮子，可以学到RPC的底层原理和原理以及各种Java编码实践的运用。
 
 # 简介
-ysera-rpc是基于Netty+Zookeeper实现的RPC框架，通过实现轮子可以学习到
+ysera-rpc是基于Netty+Zookeeper实现的RPC框架，通过实现轮子可以学习和加固对java生态组建和springboot的理解
 
 ### Java:
-- 动态代理
+- 动态代理：jdk动态代理和cglib动态代理的区别和优势。比如在jdk动态代理是基于接口的，必须满足被代理实现某一个接口才能使用jdk动态代理    
+    cglib可以代理没有实现接口的类，但是cglib不能代理final类型的类，因为cglib是通过字节码创建对应的子类来增强被代理类实现代理
 - 序列化机制以及各种序列化框架的对比，比如 hession2、kyro、protostuff。
 - 线程池的使用和Java并发包的使用
 
@@ -20,6 +21,10 @@ ysera-rpc是基于Netty+Zookeeper实现的RPC框架，通过实现轮子可以�
 - zookeeper的基本概念和api使用
 - 数据结构
 - zookeeper作为注册中心的使用
+
+### springboot
+- springboot bean生成并注入
+- 自定义注解实现组件扫描控制
 
 
 ### 简单说一下设计一个最基本的 RPC 框架的思路：
@@ -35,3 +40,59 @@ ysera-rpc是基于Netty+Zookeeper实现的RPC框架，通过实现轮子可以�
 就不复存在了。负载均衡就是为了避免单个服务器响应同一请求，容易造成服务器宕机、崩溃等问题，我们从负载均衡的这四个字就能明显感受到它的意义。    
 
 ......
+#使用方式
+在启动类上加上@EnableYseraRpcClient注解表示启用yseraRpc组件    
+```java
+@SpringBootApplication    
+@EnableYseraRpcClient    
+public class ConsumerApplication {    
+    public static void main(String[] args) {    
+        SpringApplication.run(ConsumerApplication.class,args);    
+    }    
+} 
+```
+在服务提供类上增加@RpcService注解，并设置serviceName和version属性
+```java
+@RpcService(serviceName = "rpc-helloWorld",version = 1)
+public class HelloWorldServiceImpl implements Service {
+
+    @Override
+    public String sayHello(String name) {
+        return "hello, " + name + "!,my name is" + name;
+    }
+}
+```
+在服务消费类上增加@RpcClient注解，并设置value和version属性
+```java
+@RpcClient(value = "rpc-helloWorld",version = 1)
+public interface HellWorldConsumer {
+
+    public String sayHello(String name);
+}
+```
+服务中只需要正常使用通过@Autowired注解使用
+```java
+@RequestMapping("/rpc")
+@RestController
+public class ConsumerController {
+    @Autowired
+    private HellWorldConsumer hellWorldConsumer;
+
+    @RequestMapping(path = "/hello", method = RequestMethod.GET)
+    public String sayHello(String name) {
+        return hellWorldConsumer.sayHello(name);
+    }
+}
+```
+# 自己的思考
+&emsp;&emsp;这个是一个Demo级别的rpc，但是通过这个过程，自己也遇到了一些问题。比如：怎么实现像@EnableFeignClient注解一样控制是否启用Feign、怎么像@FeignClient一样直接生成接口代理
+虽然知道这些可以使用动态代理完成，通过编码，也更加了解jdk代理和cglib的区别。还有再netty上怎么使用自定义协议，怎么处理相关事件等等。怎么处理均衡，怎么处理调用安全等等。代码真的
+就是只有通过编码才能入门使用的原理，大佬们是怎么来处理的。在工作之余，可能也会继续完善
+## 服务端
+- 服务端的持久化
+
+## 客户端
+- 客户端的服务缓存(提高效率，不必每次都查询zk)
+- 客户端的zk监听(刷新缓存)
+- 客户端的负载均衡
+等等

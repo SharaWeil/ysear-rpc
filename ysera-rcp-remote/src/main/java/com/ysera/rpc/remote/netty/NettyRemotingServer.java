@@ -18,11 +18,13 @@
 package com.ysera.rpc.remote.netty;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.ysera.rpc.remote.Request;
 import com.ysera.rpc.remote.codec.NettyDecoder;
 import com.ysera.rpc.remote.codec.NettyEncoder;
 import com.ysera.rpc.remote.netty.config.NettyServerConfig;
 import com.ysera.rpc.remote.netty.handler.NettyServerHandler;
 import com.ysera.rpc.remote.process.NettyRequestProcessor;
+import com.ysera.rpc.remote.protocol.RpcProtocol;
 import com.ysera.rpc.remote.protocol.RpcType;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -152,10 +154,9 @@ public class NettyRemotingServer {
      * @param ch socket channel
      */
     private void initNettyChannel(SocketChannel ch) {
-        serverHandler.registerProcessor(null,null,null);
         ch.pipeline()
                 .addLast("encoder", new NettyEncoder())
-                .addLast("decoder", new NettyDecoder(Object.class))
+                .addLast("decoder", new NettyDecoder(Request.class))
                 .addLast("handler", serverHandler);
     }
 
@@ -187,6 +188,6 @@ public class NettyRemotingServer {
     }
 
     public void registerProcessor(RpcType request, NettyRequestProcessor requestProcessor) {
-
+        serverHandler.registerProcessor(request,requestProcessor,null);
     }
 }

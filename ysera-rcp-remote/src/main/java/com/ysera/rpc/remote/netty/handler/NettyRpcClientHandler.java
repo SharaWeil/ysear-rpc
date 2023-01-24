@@ -10,7 +10,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
+/**
  * @author Administrator
  * @ClassName NettyRpcClientHandler
  * @createTIme 2023年01月19日 16:12:12
@@ -21,7 +21,7 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {
-            log.info("client receive msg:{}",msg);
+            log.info("server receive msg:{}",msg);
             if (msg instanceof RpcProtocol){
                 RpcProtocol rpcProtocol = (RpcProtocol) msg;
                 RpcHeader rpcHeader = rpcProtocol.getMsgHeader();
@@ -36,6 +36,8 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
                     future.setResponse(response);
                     if (future.getCallBack() != null){
                         future.executeInvokeCallback();
+                    }else {
+                        future.putResponse(response);
                     }
                 }
             }

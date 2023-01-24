@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Configuration;
  * @createTime 2023年01月18日 17:03:00
  */
 @Configuration
-@ConfigurationProperties(prefix = "ysera.rpc.netty")
+@ConfigurationProperties(prefix = "rpc.netty")
 public class NettyServerProperties {
 
-    private int port;
+    private int port = 5050;
+
+    private String address;
 
     public int getPort() {
         return port;
@@ -22,4 +24,11 @@ public class NettyServerProperties {
         this.port = port;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

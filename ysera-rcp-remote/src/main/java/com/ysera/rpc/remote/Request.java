@@ -2,7 +2,7 @@ package com.ysera.rpc.remote;
 
 import java.lang.reflect.Method;
 
-/*
+/**
  * @author Administrator
  * @ClassName Request
  * @createTIme 2023年01月19日 10:24:24
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 public class Request{
     private String clazzName;
 
-    private Method method;
+    private String method;
 
     private Object[] arguments;
 
@@ -24,7 +24,7 @@ public class Request{
     }
 
 
-    public Request(String clazzName, Method method, Object[] arguments, Class<?>[] paramType, int version) {
+    public Request(String clazzName, String method, Object[] arguments, Class<?>[] paramType, int version) {
         this.clazzName = clazzName;
         this.method = method;
         this.arguments = arguments;
@@ -47,11 +47,11 @@ public class Request{
         this.arguments = arguments;
     }
 
-    public Method getMethod() {
+    public String getMethod() {
         return method;
     }
 
-    public void setMethod(Method method) {
+    public void setMethod(String method) {
         this.method = method;
     }
 

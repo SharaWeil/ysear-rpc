@@ -2,8 +2,9 @@ package com.ysera.rpc.remote;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
-/*
+/**
  * @author Administrator
  * @ClassName RpcResponseFuture
  * @createTIme 2023年01月19日 11:48:48
@@ -64,7 +65,7 @@ public class RpcResponseFuture {
     }
 
     public Response waitResponse() throws InterruptedException {
-        latch.wait(timeoutMillis);
+        latch.await(timeoutMillis, TimeUnit.MILLISECONDS);
         return response;
     }
 

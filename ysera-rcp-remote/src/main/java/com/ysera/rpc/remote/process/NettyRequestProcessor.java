@@ -17,6 +17,7 @@
 package com.ysera.rpc.remote.process;
 
 import com.ysera.rpc.remote.Request;
+import com.ysera.rpc.remote.protocol.RpcProtocol;
 import io.netty.channel.Channel;
 
 /**
@@ -27,7 +28,7 @@ public interface NettyRequestProcessor {
     /**
      *  process logic
      * @param channel channel
-     * @param request command
+     * @param rpcProtocol command
      */
-    void process(final Channel channel, final Request request);
+    void process(final Channel channel, final RpcProtocol<?> rpcProtocol);
 }

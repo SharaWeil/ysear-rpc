@@ -1,9 +1,5 @@
 package com.ysera.rpc.remote.netty.handler;
 
-import com.ysera.rpc.remote.Request;
-import com.ysera.rpc.remote.Response;
-import com.ysera.rpc.remote.RpcResponseFuture;
-import com.ysera.rpc.remote.SpringBeanUtil;
 import com.ysera.rpc.remote.process.NettyRequestProcessor;
 import com.ysera.rpc.remote.protocol.RpcConstants;
 import com.ysera.rpc.remote.protocol.RpcHeader;
@@ -14,13 +10,9 @@ import com.ysera.rpc.util.Pair;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import jdk.nashorn.internal.objects.NativeUint8Array;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Method;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author admin
@@ -57,7 +49,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             if (null != pair){
                 Runnable runnable = () -> {
                     try {
-                        pair.getLeft().process(channel, (Request) body);
+                        pair.getLeft().process(channel, rpcProtocol);
                     } catch (Exception ex) {
                         log.error("process msg {} error", msg, ex);
                     }

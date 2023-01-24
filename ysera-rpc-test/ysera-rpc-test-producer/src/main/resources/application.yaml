@@ -1,0 +1,20 @@
+server:
+  port: 8082
+
+registry:
+  type: zookeeper
+  zookeeper:
+    namespace: ysera-rpc
+    connect-string: localhost:2181
+    retry-policy:
+      base-sleep-time: 60ms
+      max-sleep: 300ms
+      max-retries: 5
+    session-timeout: 30s
+    connection-timeout: 9s
+    block-until-connected: 600ms
+
+rpc:
+  netty:
+    port: 5056
+    address: localhost

@@ -1,7 +1,5 @@
 package com.ysera.rcp.register;
 
-import com.ysera.rpc.core.HelloService;
-import com.ysera.rpc.core.proxy.RpcProxyFactory;
 import org.junit.Test;
 
 /**
@@ -12,7 +10,5 @@ import org.junit.Test;
 public class ProxyTest {
     @Test
     public void testProxy() throws InstantiationException, IllegalAccessException {
-        HelloService helloService = RpcProxyFactory.newProxy2(HelloService.class);
-        System.out.println(helloService.sayHello("tom"));
     }
 }

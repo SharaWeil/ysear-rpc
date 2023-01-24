@@ -3,6 +3,7 @@ package com.ysera.rpc.core.proxy;
 import com.ysera.rpc.core.balance.LoadBalance;
 import com.ysera.rpc.core.balance.RandomBalance;
 import com.ysera.rpc.core.registry.RegistryClient;
+import com.ysera.rpc.core.registry.RegistryInfo;
 import com.ysera.rpc.exception.RemotingException;
 import com.ysera.rpc.remote.IRpcClient;
 import com.ysera.rpc.remote.Request;
@@ -20,7 +21,7 @@ import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
 import java.util.List;
 
-/*
+/**
  * @author Administrator
  * @ClassName AbsInvoker
  * @createTIme 2023年01月19日 10:43:43
@@ -51,16 +52,19 @@ public class AbsInvoker implements Invoker{
         rpcHeader.setSerialization(RpcSerializerType.KRYO.getType());
         long requestId = RandomUtil.randomLong();
         rpcHeader.setRequestId(requestId);
+        RegistryInfo remoteInfo = getRemoteAddress(serviceName);
+        // 设置服务提供者的全类名称
+        request.setClazzName(remoteInfo.getClazz());
         RpcProtocol<Request> protocol = new RpcProtocol<>();
         protocol.setBody(request);
         protocol.setMsgHeader(rpcHeader);
-        return client.sendSync(protocol,getRemoteAddress(serviceName));
+        return client.sendSync(protocol, new InetSocketAddress(remoteInfo.getAddress(),remoteInfo.getPort()));
     }
 
-    private InetSocketAddress getRemoteAddress(String serviceName){
-        List<InetSocketAddress> children = registryClient.children(serviceName);
+    private RegistryInfo getRemoteAddress(String serviceName){
+        List<RegistryInfo> children = registryClient.childrenInfo(serviceName);
         if (children.isEmpty()){
-            throw new RemotingException("No services available");
+            throw new RemotingException("No services available,serviceName: "+serviceName);
         }
         return loadBalance.selectOne(children);
     }

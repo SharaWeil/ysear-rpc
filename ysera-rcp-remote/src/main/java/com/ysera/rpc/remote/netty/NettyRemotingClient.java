@@ -19,10 +19,7 @@ package com.ysera.rpc.remote.netty;
 
 import com.ysera.rpc.exception.RemotingException;
 import com.ysera.rpc.exception.RemotingTimeoutException;
-import com.ysera.rpc.remote.CallBack;
-import com.ysera.rpc.remote.IRpcClient;
-import com.ysera.rpc.remote.Response;
-import com.ysera.rpc.remote.RpcResponseFuture;
+import com.ysera.rpc.remote.*;
 import com.ysera.rpc.remote.codec.NettyDecoder;
 import com.ysera.rpc.remote.codec.NettyEncoder;
 import com.ysera.rpc.remote.netty.config.NettyClientConfig;
@@ -63,7 +60,7 @@ public class NettyRemotingClient {
     /**
      *  decoder
      */
-    private final NettyDecoder decoder = new NettyDecoder(Object.class);
+    private final NettyDecoder decoder = new NettyDecoder(Response.class);
 
     /**
      * client handler

@@ -4,6 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.6</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <groupId>com.ysera.rpc</groupId>
     <artifactId>ysara-rpc</artifactId>
     <packaging>pom</packaging>
@@ -12,14 +20,8 @@
         <module>ysera-rpc-common</module>
         <module>ysera-rcp-remote</module>
         <module>ysera-rpc-core</module>
+        <module>Ysera-rpc-test</module>
     </modules>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -35,6 +37,9 @@
         <log4j.version>1.2.17</log4j.version>
         <slf4j12.version>1.7.25</slf4j12.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <junit.version>4.12</junit.version>
+        <commons.version>3.12.0</commons.version>
+        <spring.version>5.3.12</spring.version>
     </properties>
 
 

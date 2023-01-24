@@ -10,8 +10,6 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/*
+/**
  * @Author Administrator
  * @Date 2023/1/17
  *                        /root
@@ -31,8 +29,6 @@ import java.util.concurrent.TimeUnit;
  *     [[ip:port],[ip:port]]    [[ip:port],[ip:port]]
  *
  **/
-@Component
-@ConditionalOnProperty(prefix = "registry", name = "type", havingValue = "zookeeper")
 public class ZookeeperRegistry implements Registry {
     private static final Logger log = LoggerFactory.getLogger(ZookeeperRegistry.class);
 
@@ -61,6 +57,7 @@ public class ZookeeperRegistry implements Registry {
     @PostConstruct
     public void start() {
         client.start();
+        log.info("start zk client !!!");
         try {
             if (!client.blockUntilConnected(30, TimeUnit.SECONDS)) {
                 client.close();
@@ -73,13 +70,18 @@ public class ZookeeperRegistry implements Registry {
 
     @Override
     public void put(String key, String value, boolean deleteOnDisconnect) {
+        put(key,value.getBytes(StandardCharsets.UTF_8),deleteOnDisconnect);
+    }
+
+    @Override
+    public void put(String key, byte[] value, boolean deleteOnDisconnect) {
         final CreateMode mode = deleteOnDisconnect ? CreateMode.EPHEMERAL : CreateMode.PERSISTENT;
         try {
             client.create()
                     .orSetData()
                     .creatingParentsIfNeeded()
                     .withMode(mode)
-                    .forPath(key, value.getBytes(StandardCharsets.UTF_8));
+                    .forPath(key, value);
         } catch (Exception e) {
             throw new RegistryException("Failed to put registry key: " + key, e);
         }
@@ -106,4 +108,12 @@ public class ZookeeperRegistry implements Registry {
         }
     }
 
+    @Override
+    public byte[] getInfo(String key) {
+        try {
+            return client.getData().forPath(key);
+        } catch (Exception e) {
+            throw new RegistryException("check path error:", e);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.ysera.rpc.remote;
 
-/*
+/**
  * @author Administrator
  * @ClassName Response
  * @createTIme 2023年01月19日 10:37:37
@@ -12,7 +12,7 @@ public class Response {
 
     private Throwable throwable;
 
-    private int requestId;
+    private long requestId;
 
 
     public Response() {
@@ -50,11 +50,11 @@ public class Response {
         this.throwable = throwable;
     }
 
-    public int getRequestId() {
+    public long getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(int requestId) {
+    public void setRequestId(long requestId) {
         this.requestId = requestId;
     }
 }
