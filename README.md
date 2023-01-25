@@ -40,7 +40,7 @@ ysera-rpc是基于Netty+Zookeeper实现的RPC框架，通过实现轮子可以�
 就不复存在了。负载均衡就是为了避免单个服务器响应同一请求，容易造成服务器宕机、崩溃等问题，我们从负载均衡的这四个字就能明显感受到它的意义。    
 
 ......
-#使用方式
+# 使用方式
 在启动类上加上@EnableYseraRpcClient注解表示启用yseraRpc组件    
 ```java
 @SpringBootApplication    
